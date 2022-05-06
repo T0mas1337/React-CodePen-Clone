@@ -1,59 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import Editor from './Editor'
-import useLocalStorage from '../hooks/useLocalStorage'
+import React from 'react';
+import Navbar from "./Navbar/navbar";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+
+import Practice from "./pages/practice";
+import Theory from "./pages/theory";
+import Tests from "./pages/tests";
+import TextToUs from "./pages/TextToUs";
+import Chat from "./pages/chat";
+import Profile from "./pages/Profile";
+
 
 function App() {
-  const [html, setHtml] = useLocalStorage('html', '')
-  const [css, setCss] = useLocalStorage('css', '')
-  const [js, setJs] = useLocalStorage('js', '')
-  const [srcDoc, setSrcDoc] = useState('')
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setSrcDoc(`
-        <html>
-          <body>${html}</body>
-          <style>${css}</style>
-          <script>${js}</script>
-        </html>
-      `)
-    }, 250)
-
-    return () => clearTimeout(timeout)
-  }, [html, css, js])
-
   return (
     <>
-      <div className="pane top-pane">
-        <Editor
-          language="xml"
-          displayName="HTML"
-          value={html}
-          onChange={setHtml}
-        />
-        <Editor
-          language="css"
-          displayName="CSS"
-          value={css}
-          onChange={setCss}
-        />
-        <Editor
-          language="javascript"
-          displayName="JS"
-          value={js}
-          onChange={setJs}
-        />
-      </div>
-      <div className="pane">
-        <iframe
-          srcDoc={srcDoc}
-          title="output"
-          sandbox="allow-scripts"
-          frameBorder="0"
-          width="100%"
-          height="100%"
-        />
-      </div>
+      <Router>
+        <Navbar/>
+        <Routes>
+            <Route path='/' exact element={<Profile />} />
+            <Route path='/practice' element={<Practice />} />
+            <Route path='/theory' element={<Theory />} />
+            <Route path='/tests' element={<Tests />} />
+            <Route path='/textToUs' element={<TextToUs />} />
+            <Route path='/chat' element={<Chat />} />
+
+        </Routes>
+      </Router>
     </>
   )
 }
